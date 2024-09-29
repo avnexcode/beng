@@ -42,7 +42,7 @@ function getUser(username) {
     const user = users.filter(item => item.username === username)[0]
 
     if (!user) {
-        return alert(`username or password invalid`)
+        return alert(`Invalid username or password. Please try again.`)
     }
 
     return user
@@ -50,16 +50,14 @@ function getUser(username) {
 
 // todo - utils
 function toIDR(currency) {
-    return new Intl.NumberFormat('id-ID', { maximumSignificantDigits: 3 }).format(currency)
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(currency)
 }
 
 function optionsMenu(user) {
-    return prompt(`Selamat datang dengan bapak ${user.username}
-            Apa yang ingin dilakukan
-            1. Cek Saldo
-            2. Tarik Tunai
-            3. Open BO
-            4. Sabung Ayam
+    return prompt(`Welcome, ${user.username}!
+            What would you like to do?
+            1. Check Balance
+            2. Withdraw Cash
         `)
 }
 
@@ -72,18 +70,18 @@ function options(action, user) {
             cashWithdrawal(user)
             break;
         default:
-            alert('pilihan tidak tersedia')
+            alert('Invalid option. Please try again.')
             break;
     }
 }
 
 // todo - service
-function validation(username, password) {
+function validateUser(username, password) {
     const user = getUser(username)
 
     if (user) {
         if (!(user.username === username && user.password === password)) {
-            return alert('kamu gagal login')
+            return alert('Login failed. Please check your credentials and try again.')
         }
     }
 
@@ -92,32 +90,29 @@ function validation(username, password) {
 
 function checkBalance(user) {
     const balance = user.data.balance
-    alert(`Saldo kamu sekarang tersisa Rp. ${toIDR(balance)}`)
+    alert(`Your current balance is ${toIDR(balance)}`)
 }
 
 function cashWithdrawal(user) {
-    const cash = prompt("Jumlah yang di ambil: ")
+    const cash = prompt("Enter the amount you wish to withdraw: ")
     if (!(user.data.balance >= cash)) {
-        return alert(`Saldo anda tidak cukup`)
+        return alert(`Insufficient funds. Your current balance is ${toIDR(user.data.balance)}`)
     }
     const balance = user.data.balance
     const remainingBalance = balance - cash
-    alert(`Anda menarik sejumlah Rp. ${toIDR(cash)} dari saldo anda sebesar Rp. ${toIDR(balance)} menjadi Rp. ${toIDR(remainingBalance)}`)
+    alert(`You've withdrawn ${toIDR(cash)}. Your balance has changed from ${toIDR(balance)} to ${toIDR(remainingBalance)}`)
 }
 
 // todo - main
 
-function main() {
-    const username = prompt("username: ")
-    const password = prompt("password: ")
+(function () {
+    const username = prompt("Enter your username: ")
+    const password = prompt("Enter your password: ")
 
-    const user = validation(username, password)
+    const user = validateUser(username, password)
 
     if (user) {
         const action = optionsMenu(user)
         options(action, user)
     }
-}
-
-// todo - runtime
-main()
+}())
