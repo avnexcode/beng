@@ -90,17 +90,22 @@ function validateUser(username, password) {
 
 function checkBalance(user) {
     const balance = user.data.balance
-    alert(`Your current balance is ${toIDR(balance)}`)
+
+    return alert(`Your current balance is ${toIDR(balance)}`)
 }
 
 function cashWithdrawal(user) {
     const cash = prompt("Enter the amount you wish to withdraw: ")
+
     if (!(user.data.balance >= cash)) {
         return alert(`Insufficient funds. Your current balance is ${toIDR(user.data.balance)}`)
     }
+
     const balance = user.data.balance
+
     const remainingBalance = balance - cash
-    alert(`You've withdrawn ${toIDR(cash)}. Your balance has changed from ${toIDR(balance)} to ${toIDR(remainingBalance)}`)
+
+    return alert(`You've withdrawn ${toIDR(cash)}. Your balance has changed from ${toIDR(balance)} to ${toIDR(remainingBalance)}`)
 }
 
 // todo - main
